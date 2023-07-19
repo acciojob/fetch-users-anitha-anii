@@ -24,27 +24,32 @@ const App = () => {
       <button className="btn" onClick={display}>
         Get User List
       </button>
-      <table>
-        <tr>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Email</th>
-          <th>Avatar</th>
-        </tr>
-        {list.map((person, index) => (
-          <tr key={index}>
-            <td>{person.fname}</td>
-            <td>{person.lname}</td>
-            <td>{person.email}</td>
-            <td>
-              <img src={person.image} alt={`Avatar ${index + 1}`} />
-            </td>
+      {list.length === 0 ? (
+        <p>No data found to display.</p>
+      ) : (
+        <table>
+          <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Avatar</th>
           </tr>
-        ))}
-      </table>
+          {list.map((person, index) => (
+            <tr key={index}>
+              <td>{person.fname}</td>
+              <td>{person.lname}</td>
+              <td>{person.email}</td>
+              <td>
+                <img src={person.image} alt={`Avatar ${index + 1}`} />
+              </td>
+            </tr>
+          ))}
+        </table>
+      )}
     </div>
   );
 };
 
 export default App;
+
 
