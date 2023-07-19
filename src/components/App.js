@@ -3,8 +3,10 @@ import "../styles/App.css";
 
 const App = () => {
   const [list, setList] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const display = () => {
+    setLoading(true);
     fetch("https://randomuser.me/api/?results=10")
       .then((res) => res.json())
       .then((data) => {
@@ -15,6 +17,7 @@ const App = () => {
           image: user.picture.thumbnail,
         }));
         setList(users);
+        setLoading(false);
       });
   };
 
@@ -24,7 +27,9 @@ const App = () => {
       <button className="btn" onClick={display}>
         Get User List
       </button>
-      {list.length === 0 ? (
+      {loading ? (
+        <p>Loading...</p>
+      ) : list.length === 0 ? (
         <p>No data found to display.</p>
       ) : (
         <table>
@@ -51,5 +56,3 @@ const App = () => {
 };
 
 export default App;
-
-
