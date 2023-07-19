@@ -1,1 +1,9 @@
+table {
+  width: fit-content;
+  height: fit-content;
+  
+}
 
+th{
+  margin: 10px;
+}
