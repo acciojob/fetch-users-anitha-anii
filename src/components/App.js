@@ -22,7 +22,7 @@ class App extends Component {
   renderTable() {
     const { userList } = this.state;
     if (userList.length === 0) {
-      return <div>No data found</div>;
+      return <div>No data found to display.</div>;
     }
 
     return (
