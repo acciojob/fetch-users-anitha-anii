@@ -1,67 +1,70 @@
-import React, { Component } from "react";
-import "../styles/App.css";
+import React, { Component } from 'react';
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      list: [],
-      loading: false,
-    };
-  }
+  state = {
+    userList: [],
+    isLoading: false,
+  };
 
-  display = () => {
-    this.setState({ loading: true });
-    fetch("https://randomuser.me/api/?results=10")
-      .then((res) => res.json())
+  fetchUserList = () => {
+    this.setState({ isLoading: true });
+    fetch('https://randomuser.me/api/?results=10')
+      .then((response) => response.json())
       .then((data) => {
-        const users = data.results.map((user) => ({
-          fname: user.name.first,
-          lname: user.name.last,
-          email: user.email,
-          image: user.picture.thumbnail,
-        }));
-        this.setState({ list: users, loading: false });
+        this.setState({ userList: data.results, isLoading: false });
+      })
+      .catch((error) => {
+        console.error('Error fetching user list:', error);
+        this.setState({ isLoading: false });
       });
   };
 
+  renderTable() {
+    const { userList } = this.state;
+    if (userList.length === 0) {
+      return <div>No data found</div>;
+    }
+
+    return (
+      <table>
+        <thead>
+          <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Image</th>
+          </tr>
+        </thead>
+        <tbody>
+          {userList.map((user, index) => (
+            <tr key={index}>
+              <td>{user.name.first}</td>
+              <td>{user.name.last}</td>
+              <td>{user.email}</td>
+              <td>
+                <img src={user.picture.thumbnail} alt="User Thumbnail" />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    );
+  }
+
   render() {
-    const { list, loading } = this.state;
+    const { isLoading } = this.state;
 
     return (
       <div>
-        {/* Do not remove the main div */}
-        <button className="btn" onClick={this.display}>
+        <button className="btn" onClick={this.fetchUserList}>
           Get User List
         </button>
-        {loading ? (
-          <p>Loading...</p>
-        ) : list.length === 0 ? (
-          <p>No data found to display.</p>
-        ) : (
-          <table>
-            <tr>
-              <th>First Name</th>
-              <th>Last Name</th>
-              <th>Email</th>
-              <th>Avatar</th>
-            </tr>
-            {list.map((person, index) => (
-              <tr key={index}>
-                <td>{person.fname}</td>
-                <td>{person.lname}</td>
-                <td>{person.email}</td>
-                <td>
-                  <img src={person.image} alt={`Avatar ${index + 1}`} />
-                </td>
-              </tr>
-            ))}
-          </table>
-        )}
+        {isLoading ? <div>Loading...</div> : this.renderTable()}
       </div>
     );
   }
 }
 
 export default App;
+
 
